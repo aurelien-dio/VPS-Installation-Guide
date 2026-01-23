@@ -108,6 +108,7 @@ sudo nano /usr/lib/systemd/system/ssh.socket
 ```
 
 Change `ListenStream=22` (or `ListenStream=[::]:22`) to `ListenStream=2222` (or your chosen port)
+
 And `ListenStream=0.0.0.0:22` to `ListenStream=0.0.0.0:2222` (or your chosen port)
 
 ### 5.3. Apply the Changes
