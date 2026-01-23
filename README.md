@@ -107,7 +107,8 @@ Port 2222  # Replace 2222 with the port of your choice
 sudo nano /usr/lib/systemd/system/ssh.socket
 ```
 
-Change `ListenStream=22` to `ListenStream=2222` (or your chosen port)
+Change `ListenStream=22` (or `ListenStream=[::]:22`) to `ListenStream=2222` (or your chosen port)
+And `ListenStream=0.0.0.0:22` to `ListenStream=0.0.0.0:2222` (or your chosen port)
 
 ### 5.3. Apply the Changes
 
@@ -238,7 +239,7 @@ findtime = 600
 maxretry = 5
 
 [sshd]
-enabled = true
+enabled = true # Add this line if it is not already present
 port = 2222 # Your current SSH port
 logpath = %(sshd_log)s
 backend = %(sshd_backend)s
@@ -256,6 +257,27 @@ sudo systemctl enable fail2ban
 ```bash
 sudo fail2ban-client status
 sudo fail2ban-client status sshd
+```
+You should see something like that:
+
+```bash
+Status
+|- Number of jail:      1
+`- Jail list:   sshd
+```
+
+And
+
+```bash
+Status for the jail: sshd
+|- Filter
+|  |- Currently failed: 0
+|  |- Total failed:     0
+|  `- Journal matches:  _SYSTEMD_UNIT=ssh.service + _COMM=sshd
+`- Actions
+   |- Currently banned: 0
+   |- Total banned:     0
+   `- Banned IP list:
 ```
 
 ## Best Practices and Precautions
