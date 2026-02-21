@@ -13,6 +13,7 @@ This guide presents a step-by-step procedure to effectively secure your VPS serv
 - [7. Disabling Root Login via SSH](#7-disabling-root-login-via-ssh)
 - [8. Finalizing Firewall Configuration](#8-finalizing-firewall-configuration)
 - [9. Installing and Configuring Fail2ban](#9-installing-and-configuring-fail2ban)
+- [10. Configuring SSH Alias on Your Local Machine](#10-configuring-ssh-alias-on-your-local-machine)
 - [Best Practices and Precautions](#best-practices-and-precautions)
 
 ## 1. System Update
@@ -280,6 +281,59 @@ Status for the jail: sshd
    |- Total banned:     0
    `- Banned IP list:
 ```
+
+## 10. Configuring SSH Alias on Your Local Machine
+
+Instead of typing the full connection command each time:
+
+```bash
+ssh -p 2222 your_username@server_ip_address
+```
+
+You can configure an alias in your local SSH config file to simply use:
+
+```bash
+ssh myserver
+```
+
+### Edit the SSH Config File
+
+On your local machine, open (or create) the `~/.ssh/config` file:
+
+```bash
+nano ~/.ssh/config
+```
+
+Add the following block at the end of the file:
+
+```
+Host myserver
+    HostName server_ip_address
+    User your_username
+    Port 2222
+    IdentityFile ~/.ssh/id_ed25519
+```
+
+Replace each value with your own:
+- `myserver` — the alias you want to use to connect
+- `server_ip_address` — your VPS IP address
+- `your_username` — the user created in step 2
+- `2222` — the SSH port configured in step 5
+- `~/.ssh/id_ed25519` — the path to your private key generated in step 4
+
+### Set Correct Permissions
+
+```bash
+chmod 600 ~/.ssh/config
+```
+
+### Test the Connection
+
+```bash
+ssh myserver
+```
+
+You should connect to your VPS directly, without specifying a user, IP address, or port.
 
 ## Best Practices and Precautions
 
